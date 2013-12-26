@@ -1,0 +1,40 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<title>base64</title>
+<script>
+	function base64(e){
+		var file = e.target.files[0]
+		if(file)
+		{
+		readfile(file);
+		}
+	}
+	function readfile(file) { 
+		var reader = new FileReader(); 
+		reader.readAsDataURL(file); 
+		reader.onload = loaded; 
+	}
+	function loaded(e)
+	{
+		var str = e.target.result;
+		var img = document.getElementById("img");
+		img.src = str;
+		document.getElementById("OutputBase64").innerHTML = '<img height="'+img.height+'" src="'+str+'" />';
+	}
+</script>
+</head>
+<body>
+	<div id="main">
+		<h1>IE非対応 画像をBase64にエンコード</h1>
+		
+		ローカルファイルをBase64に変換します。<br>
+		<input type="file" onchange="base64(event)" style="width:100%" ><br>
+		↑にドラッグ＆ドロップ
+		
+		<textarea id="OutputBase64" style="width:90%;height:500px"></textarea>
+		
+		<div style="display:none;"><img id="img" /></div>
+	</div>
+</body>
+</html>
