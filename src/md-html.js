@@ -69,6 +69,7 @@ window.onload = function() {
 			document.getElementById('markdown-container').innerHTML = markdownConverter.makeHtml(lastText);
 			prettyPrint();
 			updateOutline();
+			$(document).trigger("updateMarkdownJs")
 		}
 	}
 
