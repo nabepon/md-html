@@ -1,0 +1,17 @@
+{
+   "content_scripts": [ {
+      "js": [ "src/md-html.js" ],
+      "matches": [ "*://*/*.md", "file://*/*.md", "*://*/*.markdown", "file://*/*.markdown", "*://*/*.mdown", "file://*/*.mdown", "*://*/*.mkdn", "file://*/*.mkdn", "*://*/*.mkd", "file://*/*.mkd", "*://*/*.text", "file://*/*.text", "*://*/*.mdtext", "file://*/*.mdtext", "*://*/*.mdtxt", "file://*/*.mdtxt" ],
+      "run_at": "document_end"
+   } ],
+   "description": "Read markdown file in Chrome.",
+   "icons": {
+      "128": "src/icon.png",
+      "16": "src/icon.png",
+      "48": "src/icon.png"
+   },
+   "manifest_version": 2,
+   "name": "md-html",
+   "permissions": [ "tabs", "\u003Call_urls>" ],
+   "version": "1.0.0"
+}
