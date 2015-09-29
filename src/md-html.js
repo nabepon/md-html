@@ -56,7 +56,7 @@ window.onload = function() {
 		//+ '<link rel="stylesheet" href="../md-html/src/style.css" />'
 	);
 	
-	
+	var orig_src_html = $("body").html();
 	document.body.innerHTML = '<div id="markdown-container"></div><div id="markdown-outline"></div><div id="markdown-backTop" onclick="window.scrollTo(0,0);"></div>';
 	
 	window.onresize = showOutline;
@@ -123,9 +123,12 @@ window.onload = function() {
 		outline.style.display = 'block';
 	}
 
-	var fileurl = location.href,
-		bLocalFile = /^file:\/\//i.test(fileurl);
-		
+	var fileurl    = location.href;
+	var bLocalFile = /^file:\/\//i.test(fileurl);
+	var is_reload  = location.search.match(/reload/);
+	var is_chrome  = navigator.userAgent.match(/Chrome/);
+	
+	// IEの場合
 	if (window.ActiveXObject) {
 		var checkUpdate = function () {
 			var ajaxFile = $.ajax({type:"GET",url: fileurl + '?rnd=' + new Date().getTime() ,dataType: "text", async: false});
@@ -135,16 +138,30 @@ window.onload = function() {
 		}
 		
 		checkUpdate();
+		
+	// ?reloadを付けた場合
+	}else if(is_reload){
+		updateMarkdown(orig_src_html);
+		var checkUpdate = function () {
+			updateMarkdown(orig_src_html);
+			setTimeout(function(){ location.reload() }, 1000);
+		}
+		checkUpdate();
+		
+	// Chromeの場合
+	}else if(is_chrome){
+		updateMarkdown(orig_src_html);
+		
+	//その他
 	}else{
 		var xmlhttp = new XMLHttpRequest();
 		xmlhttp.onreadystatechange = function() {
 			if (xmlhttp.readyState == 4 && xmlhttp.status != 404) {
 				updateMarkdown(xmlhttp.responseText);
-				
 			}
 		};
 		
-		function checkUpdate() {
+		var checkUpdate = function () {
 			xmlhttp.abort();
 			xmlhttp.open("GET", fileurl + '?rnd=' + new Date().getTime(), true);
 			xmlhttp.send(null);
