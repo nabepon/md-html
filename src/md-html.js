@@ -57,6 +57,8 @@ window.onload = function() {
 	);
 	
 	var orig_src_html = $("body").html();
+	var pretag = $("body").find("pre");
+	if( pretag.length > 0 ) orig_src_html = $(pretag).html();
 	document.body.innerHTML = '<div id="markdown-container"></div><div id="markdown-outline"></div><div id="markdown-backTop" onclick="window.scrollTo(0,0);"></div>';
 	
 	window.onresize = showOutline;
@@ -148,16 +150,19 @@ window.onload = function() {
 		}
 		checkUpdate();
 		
-	// Chromeの場合
-	}else if(is_chrome){
-		updateMarkdown(orig_src_html);
-		
 	//その他
 	}else{
 		var xmlhttp = new XMLHttpRequest();
+		
 		xmlhttp.onreadystatechange = function() {
 			if (xmlhttp.readyState == 4 && xmlhttp.status != 404) {
-				updateMarkdown(xmlhttp.responseText);
+				if( !xmlhttp.responseText ){
+					// Chromeの場合
+					updateMarkdown(orig_src_html);
+				}else{
+					updateMarkdown(xmlhttp.responseText);
+					if (bLocalFile) timer = setTimeout(checkUpdate, 200);
+				}
 			}
 		};
 		
@@ -165,8 +170,6 @@ window.onload = function() {
 			xmlhttp.abort();
 			xmlhttp.open("GET", fileurl + '?rnd=' + new Date().getTime(), true);
 			xmlhttp.send(null);
-			
-			if (bLocalFile) setTimeout(checkUpdate, 200);
 		}
 		
 		checkUpdate();
