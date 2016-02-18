@@ -1,5 +1,5 @@
 ﻿
-// 2103/10/25 渡辺貴明<watanabe@vgd.co.jp><siokosyo@gmail.com>
+// 2013/10/25 渡辺貴明<siokosyo@gmail.com>
 // ローカルでMarkdownの表示、編集をするため
 // 各種スクリプトを4つ組み合わせて1つのjsにし、少し手を加えました
 
@@ -56,9 +56,9 @@ window.onload = function() {
 		//+ '<link rel="stylesheet" href="../md-html/src/style.css" />'
 	);
 	
-	var orig_src_html = $("body").html();
+	var orig_src_html = $("body").html().replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&#39;/g, '\'').replace(/&amp;/g, '&');
 	var pretag = $("body").find("pre");
-	if( pretag.length > 0 ) orig_src_html = $(pretag).html();
+	if( pretag.length > 0 ) orig_src_html = $(pretag).html().replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&#39;/g, '\'').replace(/&amp;/g, '&');
 	document.body.innerHTML = '<div id="markdown-container"></div><div id="markdown-outline"></div><div id="markdown-backTop" onclick="window.scrollTo(0,0);"></div>';
 	
 	window.onresize = showOutline;
